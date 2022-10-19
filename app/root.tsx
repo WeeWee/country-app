@@ -14,18 +14,18 @@ import {
 } from "~/utils/theme-preference";
 
 import {
-  ActionFunction,
+  type ActionFunction,
   json,
-  LoaderFunction,
+  type LoaderFunction,
   redirect,
 } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
-import { DarkModeState } from "~/hooks/usedarkmode";
 import styles from "./tailwind.css";
 import Api, { GetCountry } from "~/api";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { DarkModeState } from "./hooks/usedarkmode";
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const length = 12;
@@ -62,6 +62,7 @@ export const action: ActionFunction = async ({ request }) => {
   const sessionTheme = await getSessionTheme(cookieHeader);
   const theme: DarkModeState = sessionTheme.get("colorMode") || "light";
   const newTheme = theme === "light" ? "dark" : "light";
+  console.log(newTheme);
   sessionTheme.set("colorMode", newTheme);
   const cookie = await commitSessionTheme(sessionTheme);
   //console.log(session.data.colorMode);
@@ -83,7 +84,6 @@ export type ContextType = ReturnType<typeof loader>;
 export default function App() {
   const { colorMode, countries, offset, length, status, searchParam } =
     useLoaderData<ReturnType<typeof loader>>();
-
   const formRef = useRef(null);
   const Context: ReturnType<typeof loader> = {
     colorMode,
@@ -93,7 +93,6 @@ export default function App() {
     status,
     searchParam,
   };
-  console.log(offset);
   return (
     <html lang="en">
       <head>

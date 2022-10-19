@@ -1,17 +1,7 @@
-import { useState } from "react";
-import Api from "~/api";
 import Buttons from "~/components/buttons";
-import ToggleMode from "~/components/toggleMode";
-import { getSession, commitSession } from "~/utils/theme-preference";
-import {
-  ActionFunction,
-  json,
-  LoaderFunction,
-  redirect,
-} from "@remix-run/node";
-import { Form, useLoaderData, useOutletContext } from "@remix-run/react";
-import { DarkModeState } from "~/hooks/usedarkmode";
-import { ContextType } from "~/root";
+
+import { useOutletContext } from "@remix-run/react";
+import type { ContextType } from "~/root";
 
 export default function Index() {
   const { colorMode, countries, offset, length, status, searchParam } =
