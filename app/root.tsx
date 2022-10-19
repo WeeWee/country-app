@@ -58,15 +58,16 @@ export const loader: LoaderFunction = async ({ request }) => {
   );
 };
 export const action: ActionFunction = async ({ request }) => {
+  const url = new URL(request.url);
+
   const cookieHeader = request.headers.get("Cookie");
   const sessionTheme = await getSessionTheme(cookieHeader);
   const theme: DarkModeState = sessionTheme.get("colorMode") || "light";
   const newTheme = theme === "light" ? "dark" : "light";
-  console.log(newTheme);
   sessionTheme.set("colorMode", newTheme);
   const cookie = await commitSessionTheme(sessionTheme);
   //console.log(session.data.colorMode);
-  return redirect("/", {
+  return redirect(url.href, {
     headers: {
       "Set-Cookie": cookie,
     },
