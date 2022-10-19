@@ -41,21 +41,14 @@ export const loader: LoaderFunction = async ({ request }) => {
   const cookieHeader = request.headers.get("Cookie");
   const sessionTheme = await getSessionTheme(cookieHeader);
   const theme: DarkModeState = sessionTheme.get("colorMode") || "light";
-  return json(
-    {
-      status: countryData.status,
-      searchParam: searchParam,
-      colorMode: theme,
-      countries: countries,
-      offset: offset,
-      length: length,
-    },
-    {
-      headers: {
-        "Cache-Control": `public, max-age=${10}, s-max-age=${100}`,
-      },
-    }
-  );
+  return json({
+    status: countryData.status,
+    searchParam: searchParam,
+    colorMode: theme,
+    countries: countries,
+    offset: offset,
+    length: length,
+  });
 };
 export const action: ActionFunction = async ({ request }) => {
   const url = new URL(request.url);
@@ -66,6 +59,7 @@ export const action: ActionFunction = async ({ request }) => {
   const newTheme = theme === "light" ? "dark" : "light";
   sessionTheme.set("colorMode", newTheme);
   const cookie = await commitSessionTheme(sessionTheme);
+
   //console.log(session.data.colorMode);
   return redirect(url.href, {
     headers: {
